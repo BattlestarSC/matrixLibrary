@@ -29,7 +29,7 @@ int numberOfBits(mask * in)
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
   //if invalid
-  if(in->noOfRows != in->noOfColumns || in->noOfRows < 2 || (in->noOfColumns > 2 && limit == NULL))
+  if(in->noOfRows != in->noOfColumns || in->noOfRows < 2)
   {
     return 0;
   }
@@ -48,13 +48,13 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       //Now, set the matrix by x,y (row, column)
       int y[2] = {-1, -1};
       //These will always be the lowest two items because a 4x4 will be made of 4 3x3s which is in turn made of 3 2x2s, all of which are bottom row
-      int x[2] = {};
+      int x[2] = {in->noOfRows-1, in->noOfRows-2};
 
       for(int i = 0; i < limit->length; i++)
       {
         if(  (  (  *(limit->dat) >> i ) & 0x1 ) > 0 )
         {
-          if(x[0] != -1)
+          if(y[0] == -1)
           {
             y[0] = i;
           }
