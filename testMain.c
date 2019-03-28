@@ -5,6 +5,7 @@
 #include <float.h>
 
 #include "matrix.h"
+#include "optimization.h"
 #include "display.h"
 
 float sigmoid(float x);
@@ -44,24 +45,24 @@ int main(void){
   printMatrix(f); */
   //Below is a list of 100 randomly generated decmial numbers
   //Gotta love free online tools
-  /*
+  
   float dataQ[] = {55.958,92.865,17.723,33.027,62.595,49.683,30.432,45.987,89.106,86.879,60.515,65.827,40.301,52.755,24.982,27.967,21.902,71.672,50.405,1.221,66.190,96.495,53.216,73.074,84.995,80.491,50.197,76.827,7.024,15.995,77.221,18.698,92.020,35.385,97.277,74.591,9.224,13.479,36.471,93.072,18.228,53.431,37.638,33.138,54.759,86.447,18.776,11.465,74.763,74.750,23.736,28.318,70.006,87.576,60.275,96.646,20.091,82.936,24.282,79.809,71.027,58.965,31.250,41.787,58.708,14.240,47.554,76.176,19.470,13.064,16.035,81.619,61.287,38.828,95.617,92.180,73.166,65.748,33.776,43.068,26.655,99.546,61.059,30.420,1.536,76.281,2.185,72.207,24.261,43.466,97.644,97.603,90.470,81.608,78.831,62.674,45.011,86.460,30.532,45.977};
-  matrix * s = loadMatrix(2, 2, dataA);
-  printMatrix(s);
-  printf("\nDet of s is %f\n", detOf2By2(s));
-  matrix * h = loadMatrix(2, 2, dataQ);
-  printMatrix(h);
-  matrix * sdf = loadMatrix(3,3, dataQ);
-  printMatrix(sdf);
-  printf("\nDeterminant of above is %f\n", determinantOfMatrix(sdf, NULL));
-  printf("\nDeterminant of H is %f\n", determinantOfMatrix(h,NULL));
-  matrix * l = loadMatrix(4, 4, dataQ);
-  printMatrix(l);
-  printf("The determinant of l is %f\n", determinantOfMatrix(l,NULL));
-  printf("The determinat of above is %f\n", determinantOfMatrix(h,NULL));
+  //matrix * s = loadMatrix(2, 2, dataA);
+  //printMatrix(s);
+  //printf("\nDet of s is %f\n", detOf2By2(s));
+  //matrix * h = loadMatrix(2, 2, dataQ);
+  //printMatrix(h);
+  //matrix * sdf = loadMatrix(3,3, dataQ);
+  //printMatrix(sdf);
+  //printf("\nDeterminant of above is %f\n", determinantOfMatrix(sdf, NULL));
+  //printf("\nDeterminant of H is %f\n", determinantOfMatrix(h,NULL));
+  //matrix * l = loadMatrix(4, 4, dataQ);
+  //printMatrix(l);
+  //printf("The determinant of l is %f\n", determinantOfMatrix(l,NULL));
+  //printf("The determinat of above is %f\n", determinantOfMatrix(h,NULL));
   matrix * q = loadMatrix(10, 10, dataQ);
   printMatrix(q);
-  printf("The determinant of q is %f\n", determinantOfMatrix(q,NULL)); */
+  printf("The determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
   return 0;
 }
 
