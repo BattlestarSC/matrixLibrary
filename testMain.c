@@ -65,10 +65,19 @@ int main(void){
   printf("The fast determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
   //printf("The slow determinant of q is %f\n", determinantOfMatrix(q,NULL));
 
-  printf("Random matrix \n\n");
-  matrix * newRand = randomMatrix(200, 200, 1000);
-  printMatrix(newRand);
-  printf("Determinant of the random matrix is %f \n", fasterDeterminantOfAMatrix(newRand, NULL));
+  matrix * randMatrix;
+  for(int i=25;i<200;i++)
+  {
+    randMatrix = randomMatrix(i, i, 1000);
+    printf("The determinant of a random %d by %d is %f\n", i, i, fasterDeterminantOfAMatrix(randMatrix, NULL));
+    freeMatrix(randMatrix);
+  }
+
+  float dataY[25] = {60, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
+  matrix * y = loadMatrix(5,5, dataY);
+  printMatrix(y);
+  printf("det of y is %f or %f\n", fasterDeterminantOfAMatrix(y, NULL), determinantOfMatrix(y, NULL));
+
   return 0;
 }
 

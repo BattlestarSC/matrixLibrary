@@ -817,6 +817,10 @@ matrix * randomMatrix(int rows, int columns, int max)
     for(int i = 0; i < (rows*columns);i++)
     {
       inputs[i] = rand() + (1.0 / rand());
+      while(inputs[i] == 0.0)
+      {
+        inputs[i] = rand() + (1.0 / rand());
+      }
     }
   }
   else
@@ -824,6 +828,10 @@ matrix * randomMatrix(int rows, int columns, int max)
     for(int i = 0; i < (rows*columns); i ++)
     {
       inputs[i] = (rand() % max) + (1.0 / rand());
+      while(inputs[i] == 0.0)
+      {
+        inputs[i] = (rand() % max) + (1.0 / rand());
+      }
     }
   }
   matrix * result = loadMatrix(rows, columns, inputs);

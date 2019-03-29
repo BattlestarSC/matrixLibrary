@@ -28,18 +28,20 @@ int numberOfBits(mask * in)
 */
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
+  float result = 0.0;
+
   //if invalid
   if(in->noOfRows != in->noOfColumns || in->noOfRows < 2)
   {
-    return 0;
+    result = -1.0;;
   }
   //if native 2x2
-  if(in->noOfRows == 2)
+  if(in->noOfRows == 2 && result != -1.0)
   {
-    return detOf2By2(in);
+    result = detOf2By2(in);
   }
 
-
+  if(result == 0.0){
   if(limit != NULL)
   {
     //if 2x2 by mask, base case
@@ -66,14 +68,13 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       }
       float a = in->columns[y[0]]->data[x[0]] * in->columns[y[1]]->data[x[1]];
       float b = in->columns[y[0]]->data[x[1]] * in->columns[y[1]]->data[x[0]];
-      return a - b;
+      result = a - b;
     }
 
   }
   else 
   //now recurse
   {
-    float result = 0.0;
 
     if(limit == NULL)
     {
@@ -89,7 +90,6 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         *(limiter.dat) = ( ( ( *(limiter.dat) >> i ) ^ 0x1 ) << i);
         result = result + (negOneToThePower(i) * fasterDeterminantOfAMatrix(in, &limiter) * in->columns[i]->data[0]);
       }
-      return result;
 
     }
     else
@@ -105,7 +105,6 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         }
       }
 
-      float result = 0.0;
       //now reduce it from the mask
       for(int i = 0; i < numberOfRemainingColumns; i++)
       {
@@ -116,8 +115,9 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         *(newLimit.dat) = (((*(newLimit.dat) >> stillValid[i]) ^ 0x1) << stillValid[i]);
         result = result + (negOneToThePower(i) * in->columns[stillValid[i]]->data[(newLimit.length - numberOfRemainingColumns)] * fasterDeterminantOfAMatrix(in, &newLimit));
       }
-      return result;
     }
 
   }
+  }
+  return result;
 }
