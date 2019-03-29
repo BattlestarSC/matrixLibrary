@@ -806,7 +806,30 @@ matrix * columnRemovedMatrix(matrix * in, int column)
   return result;
 }
 
-
+/*
+  Generate a random matrix
+*/
+matrix * randomMatrix(int rows, int columns, int max)
+{
+  float inputs[rows*columns];
+  if(max == 0)
+  {
+    for(int i = 0; i < (rows*columns);i++)
+    {
+      inputs[i] = rand() + (1.0 / rand());
+    }
+  }
+  else
+  {
+    for(int i = 0; i < (rows*columns); i ++)
+    {
+      inputs[i] = (rand() % max) + (1.0 / rand());
+    }
+  }
+  matrix * result = loadMatrix(rows, columns, inputs);
+  return result;
+  
+}
 /*
 TODO:
   create random matrix (of fixed sizes)

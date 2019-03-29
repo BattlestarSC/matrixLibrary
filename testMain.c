@@ -28,7 +28,7 @@ int main(void){
   printf("D by sigmoid\n");
   matrix * e = matrixByFunction(sig,d);
   printMatrix(e);
-  /* printMatrix(a);
+  printMatrix(a);
   printMatrix(d);
   float dataD[] = {3.3, 2.2, 5.5};
   vector * datd = loadVector(3, dataD);
@@ -62,7 +62,13 @@ int main(void){
   //printf("The determinat of above is %f\n", determinantOfMatrix(h,NULL));
   matrix * q = loadMatrix(10, 10, dataQ);
   printMatrix(q);
-  printf("The determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
+  printf("The fast determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
+  //printf("The slow determinant of q is %f\n", determinantOfMatrix(q,NULL));
+
+  printf("Random matrix \n\n");
+  matrix * newRand = randomMatrix(200, 200, 1000);
+  printMatrix(newRand);
+  printf("Determinant of the random matrix is %f \n", fasterDeterminantOfAMatrix(newRand, NULL));
   return 0;
 }
 

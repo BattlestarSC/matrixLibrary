@@ -116,7 +116,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         *(newLimit.dat) = (((*(newLimit.dat) >> stillValid[i]) ^ 0x1) << stillValid[i]);
         result = result + (negOneToThePower(i) * in->columns[stillValid[i]]->data[(newLimit.length - numberOfRemainingColumns)] * fasterDeterminantOfAMatrix(in, &newLimit));
       }
-
+      return result;
     }
 
   }

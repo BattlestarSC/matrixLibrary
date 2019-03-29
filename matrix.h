@@ -49,6 +49,7 @@ float detOf2By2(matrix * data);
 void freeJunk(junk * head);
 matrix * removeRow(matrix * in, int row);
 matrix * columnRemovedMatrix(matrix * in, int column);
+matrix * randomMatrix(int rows, int columns, int max);
 
 
 
