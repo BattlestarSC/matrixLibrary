@@ -72,7 +72,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
     }
 
   }
-  else 
+  else
   //now recurse
   {
 
@@ -118,6 +118,26 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
     }
 
   }
+  }
+  return result;
+}
+
+
+
+/*
+  Attempt two:
+    Lets use some helper functions
+*/
+mask * loadMask(int length, int *validColumns, int columnLength)
+{
+  mask * result = malloc(sizeof(mask));
+  result->length = length;
+  result->dat = malloc((length/8)+1);
+  *(result->dat) = *(result->dat) & 0x0;
+  *(result->dat) = ~*(result->dat);
+  for(int i=0;i<columnLength;i++)
+  {
+    *(result->dat) = (*(result->dat) >> i) ^ 0x1;
   }
   return result;
 }
