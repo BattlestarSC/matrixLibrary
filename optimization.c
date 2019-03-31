@@ -87,7 +87,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         *(limiter.dat) = *(limiter.dat) & 0x0; //clear it
         *(limiter.dat) = ~*(limiter.dat); //now make them all valid
 
-        *(limiter.dat) = ( ( ( *(limiter.dat) >> i ) ^ 0x1 ) << i);
+        *(limiter.dat) = ( ( ( *(limiter.dat) >> i ) ^ 0x1 ) << i); //just set bit i to 0
         result = result + (negOneToThePower(i) * fasterDeterminantOfAMatrix(in, &limiter) * in->columns[i]->data[0]);
       }
 
