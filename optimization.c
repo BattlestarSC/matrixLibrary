@@ -98,7 +98,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       int numberOfRemainingColumns=0;
       for(int l = 0; l < limit->length; l++)
       {
-        if( ( *(limit->dat) >> l ) > 0)
+        if( ( ( *(limit->dat) ) & 0x1 << l) > 0)
         {
           stillValid[numberOfRemainingColumns] = l;
           numberOfRemainingColumns++;
@@ -111,8 +111,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         mask newLimit;
         newLimit.length = limit->length;
         newLimit.dat = malloc((newLimit.length/8) + 1);
-        *(newLimit.dat) = *(limit->dat);
-        *(newLimit.dat) = (((*(newLimit.dat) >> stillValid[i]) ^ 0x1) << stillValid[i]);
+        *(newLimit.dat) = *(limit->dat) ^ (0x1 << stillValid[i]);
         result = result + (negOneToThePower(i) * in->columns[stillValid[i]]->data[(newLimit.length - numberOfRemainingColumns)] * fasterDeterminantOfAMatrix(in, &newLimit));
       }
     }
