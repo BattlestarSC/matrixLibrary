@@ -76,7 +76,7 @@ int main(void){
   float dataY[25] = {60, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
   matrix * y = loadMatrix(5,5, dataY);
   printMatrix(y);
-  printf("det of y is %f or %f\n", fasterDeterminantOfAMatrix(y, NULL), determinantOfMatrix(y, NULL));
+  printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
 
   return 0;
 }
