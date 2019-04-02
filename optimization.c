@@ -10,6 +10,7 @@
 /* 
 
   The plan is to use a mask for columns no longer allowed
+  DEPRECATED, LEFT FOR NOTES OF LOGIC
 
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
