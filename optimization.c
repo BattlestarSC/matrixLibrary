@@ -6,26 +6,11 @@
 #include "matrix.h"
 #include "optimization.h"
 
-/*
-    Supportive funtion, counts bits
-*/
-int numberOfBits(mask * in)
-{
-  int result = 0;
-  for(int i = 0; i < in->length ; i++)
-  {
-    //If the bit is a one
-    if( ( (  *(in->dat) >> i  ) & 0x1 ) > 0)
-    {
-      result++;
-    }
-  }
-  return result;
-}
 
-/*
+/* 
+
   The plan is to use a mask for columns no longer allowed
-*/
+
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
   float result = 0.0;
@@ -120,23 +105,119 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   }
   return result;
 }
-
+ */
 
 
 /*
   Attempt two:
     Lets use some helper functions
 */
-mask * loadMask(int length, int *validColumns, int columnLength)
+/*
+    Supportive funtion, counts bits
+*/
+int numberOfBits(mask * in)
 {
-  mask * result = malloc(sizeof(mask));
-  result->length = length;
-  result->dat = malloc((length/8)+1);
-  *(result->dat) = *(result->dat) & 0x0;
-  *(result->dat) = ~*(result->dat);
-  for(int i=0;i<columnLength;i++)
+  int result = 0;
+  for(int i = 0; i < in->length ; i++)
   {
-    *(result->dat) = (*(result->dat) >> i) ^ 0x1;
+    //If the bit is a one
+    if(*(in->dat) & (0x1 << i) > 0)
+    {
+      result++;
+    }
   }
   return result;
+}
+//Load limits into a new mask
+mask * loadMask(int length, int newRestriction, mask * old)
+{
+  //create result
+  mask result;
+  result.length = length;
+  if(result.length <= 32)
+  {
+    result.numberOfSegments = 1;
+    result.dat[0] = malloc( result.numberOfSegments );
+  }
+  else
+  {
+    if(result.length % 32 == 0)
+    {
+      result.numberOfSegments = result.length / 32;
+      for(int i = 0; i < result.numberOfSegments; i++)
+      {
+        result.dat[i] = malloc(4);
+      }
+    }
+    else
+    {
+      result.numberOfSegments = result.length / 32;
+      result.numberOfSegments++;
+      for(int i = 0; i < result.numberOfSegments; i++)
+      {
+        result.dat[i] = malloc(4);
+      }
+    }
+  }
+  
+  //if new mask
+  if(!old)
+  {
+    goto newMask;
+  }
+  goto oldMask;
+
+
+
+
+  newMask:
+    if(result.numberOfSegments == 1)
+    {
+      *(result.dat) = *(result.dat) & 0x0;
+      *(result.dat) = ~ *(result.dat);
+      *(result.dat) = *(result.dat) ^ (0x1 << newRestriction);
+      goto end;
+    }
+    else
+    {
+      for(int i=0;i<result.numberOfSegments;i++)
+      {
+        *(result.dat[i]) = *(result.dat[i]) & 0x0;
+        *(result.dat[i]) = ~*(result.dat[i]);
+        if(newRestriction / 32 == i)
+        {
+          *(result.dat[i]) = *(result.dat[i]) ^ (0x1 << (newRestriction % 32));
+        }
+      }
+      goto end;
+    }
+    
+
+    oldMask:
+      if((old->numberOfSegments) != 1){
+        for(int i=0;i<(old->numberOfSegments);i++)
+        {
+         *(result.dat[i]) = (old->dat[i]);
+          if((newRestriction / 32) == i)
+          {
+           *(result.dat[i]) = *(result.dat[i]) ^ (0x1 << (newRestriction % i));
+          }
+        }
+      }
+      else
+      {
+        *(result.dat) = *(old->dat);
+        *(result.dat) = *(old->dat) ^ (0x1 << newRestriction);
+      }
+
+      
+
+
+  end:
+    return &result;
+}
+//Revised attempt two
+float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
+{
+
 }
