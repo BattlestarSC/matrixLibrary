@@ -22,6 +22,15 @@ int main(void){
   
   matrix * d = copyMatrix(a);
 
+  //skip testing
+  */
+  mask a = loadMask(16, 9, NULL);
+  printf("a value is %d and is make of %d of 1 parts\n", *(a.dat), a.numberOfSegments);
+  mask b = loadMask(16, 3, &a);
+  printf("mask b is %d and of size %d\n", *(b.dat), b.length);
+  printf("bit counting test, should get 15 and 14, %d %d\n", numberOfBits(&a), numberOfBits(&b));
+  goto end;
+  /*
   float (*sig)(float) = sigmoid; 
   printf("D origional\n");
   printMatrix(d);
@@ -78,6 +87,7 @@ int main(void){
   printMatrix(y);
   printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
 
+  end:
   return 0;
 }
 

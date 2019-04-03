@@ -121,17 +121,33 @@ int numberOfBits(mask * in)
   int result = 0;
   for(int i=0;i<in->numberOfSegments;i++)
   {
-    for(int q=0;q<32;q++)
+    if(i != in->numberOfSegments-1)
     {
-      if((in->dat[i] & (0x1 << q) ) > 0) 
+      for(int q=0;q<32;q++)
       {
-        result++;
+        if((in->dat[i] & (0x1 << q) ) > 0) 
+        {
+          result++;
+        }
       }
     }
+    else
+    {
+      for(int x=0;x<(in->length - (32 * i));x++)
+      {
+        if((in->dat[i] & (0x1 << x) ) > 0) 
+        {
+          result++;
+        }
+      }
+    }
+    
   }
   return result;
 }
 //Load limits into a new mask
+//accurate, but reversed, as in bit 3 is nnnnYnn, but that should be fine
+//remember 0 indexing
 mask loadMask(int length, int newRestriction, mask * old)
 {
   mask result;
