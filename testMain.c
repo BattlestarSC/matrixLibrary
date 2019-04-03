@@ -29,6 +29,9 @@ int main(void){
   mask b = loadMask(16, 3, &a);
   printf("mask b is %d and of size %d\n", *(b.dat), b.length);
   printf("bit counting test, should get 15 and 14, %d %d\n", numberOfBits(&a), numberOfBits(&b));
+  mask c = loadMask(16, 0, &b);
+  mask d = loadMask(16, 1, &c);
+  printf("test for getValidBitLocation, 1 should == 2, and 2 should == 4, actual: %d, %d\n", getValidBitLocation(&d, 1), getValidBitLocation(&d, 2));
   goto end;
   /*
   float (*sig)(float) = sigmoid; 

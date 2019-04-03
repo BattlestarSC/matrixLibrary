@@ -208,8 +208,78 @@ mask loadMask(int length, int newRestriction, mask * old)
   return result; 
 }
 
+//Return the int location of valid bits, ask for which one in reverse order, so 1 with nnYnnnnYnnYnYn would return 1
+int getValidBitLocation(mask * in, int whichOne)
+{
+  int result = -1;//failure if no result found
+  int count = 0;//Which one are we on
+  for(int i=0;i<in->numberOfSegments;i++)
+  {
+    if(i != in->numberOfSegments - 1)
+    {
+      for(int x=0;x<32;x++)
+      {
+        if((in->dat[i] & (0x1 << x)) > 0 )
+        {
+          count++;
+          if(count == whichOne)
+          {
+            result = (i*32) + x;
+            goto getValidBitEnd;
+          }
+        }
+      }
+    }
+    else
+    {
+      for(int q=0;q<in->length - (i*32);q++)
+      {
+        if((in->dat[i] & (0x1 << q)) > 0 )
+        {
+          count++;
+          if(count == whichOne)
+          {
+            result = (i*32) + q;
+            goto getValidBitEnd;
+          }
+        }
+      }
+    }
+    
+  }
+
+  getValidBitEnd:
+    return result;
+}
+
 //Revised attempt two
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
+  float result=0.0;
 
+  //if invalid
+  if(in->noOfColumns != in->noOfRows || in->noOfRows < 2)
+  {
+    goto fasterDeterminantOfAMatrixEnd; //Is this common/acceptable/good/not sloppy to have here? 
+  }
+
+  //base case, without mask
+  if(in->noOfColumns == 2)
+  {
+    float ad = in->columns[0]->data[0] * in->columns[1]->data[1];
+    float bc = in->columns[0]->data[1] * in->columns[1]->data[0];
+    result = ad - bc;
+    goto fasterDeterminantOfAMatrixEnd;
+  }
+
+  //base case, with mask
+  if(numberOfBits(limit) == 2)
+  {
+    //TODO: use another supportive function
+  }
+
+
+
+  fasterDeterminantOfAMatrixEnd:
+    return result;
 }
