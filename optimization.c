@@ -273,12 +273,14 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   }
 
   //base case, with mask
-  if(numberOfBits(limit) == 2)
-  {
-    float a = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 2] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 1];
-    float b = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 1] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 2];
-    result = a - b;
-    goto fasterDeterminantOfAMatrixEnd;
+  if(limit){
+    if(numberOfBits(limit) == 2)
+    {
+      float a = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 2] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 1];
+      float b = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 1] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 2];
+      result = a - b;
+      goto fasterDeterminantOfAMatrixEnd;
+    }
   }
 
   //if failure occured
@@ -288,12 +290,25 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   }
   //Now break it down recursivally
   //TODO
-  for(int n = 0; n < numberOfBits(limit); n++ )
-  {
-    int nl = getValidBitLocation(limit, n);
-    mask newLimitation = loadMask(limit->length, nl, limit);
-    result = result + (negOneToThePower(n) * in->columns[nl]->data[numberOfBits(limit)] * fasterDeterminantOfAMatrix(in, &newLimitation));
+  if(limit){
+    for(int n = 0; n < numberOfBits(limit); n++ )
+    {
+      int nl = getValidBitLocation(limit, n);
+      mask newLimitation = loadMask(limit->length, nl, limit);
+      result = result + (negOneToThePower(n) * in->columns[nl]->data[( in->noOfColumns - numberOfBits(limit) )] * fasterDeterminantOfAMatrix(in, &newLimitation));
+    }
+    goto fasterDeterminantOfAMatrixEnd;
   }
+  else
+  {
+    for(int t = 0; t < in->noOfColumns; t++)
+    {
+      mask newLimit = loadMask(in->noOfColumns, t, NULL);
+      result = result + (negOneToThePower(t) * in->columns[t]->data[0] * fasterDeterminantOfAMatrix(in, &newLimit));
+    }
+    goto fasterDeterminantOfAMatrixEnd;
+  }
+  
 
 
 
