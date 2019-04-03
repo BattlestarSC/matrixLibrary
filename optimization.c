@@ -209,6 +209,7 @@ mask loadMask(int length, int newRestriction, mask * old)
 }
 
 //Return the int location of valid bits, ask for which one in reverse order, so 1 with nnYnnnnYnnYnYn would return 1
+//Requires additional testing
 int getValidBitLocation(mask * in, int whichOne)
 {
   int result = -1;//failure if no result found
@@ -314,4 +315,4 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 
   fasterDeterminantOfAMatrixEnd:
     return result;
-}
+} 
