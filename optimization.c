@@ -281,8 +281,19 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
     goto fasterDeterminantOfAMatrixEnd;
   }
 
+  //if failure occured
+  if(result != 0.0)
+  {
+    goto fasterDeterminantOfAMatrixEnd;
+  }
   //Now break it down recursivally
   //TODO
+  for(int n = 0; n < numberOfBits(limit); n++ )
+  {
+    int nl = getValidBitLocation(limit, n);
+    mask newLimitation = loadMask(limit->length, nl, limit);
+    result = result + (negOneToThePower(n) * in->columns[nl]->data[numberOfBits(limit)] * fasterDeterminantOfAMatrix(in, &newLimitation));
+  }
 
 
 

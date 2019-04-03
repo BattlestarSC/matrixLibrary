@@ -24,7 +24,7 @@ int main(void){
 
   //skip testing
   */
-  mask a = loadMask(16, 9, NULL);
+ /*  mask a = loadMask(16, 9, NULL);
   printf("a value is %d and is make of %d of 1 parts\n", *(a.dat), a.numberOfSegments);
   mask b = loadMask(16, 3, &a);
   printf("mask b is %d and of size %d\n", *(b.dat), b.length);
@@ -32,7 +32,7 @@ int main(void){
   mask c = loadMask(16, 0, &b);
   mask d = loadMask(16, 1, &c);
   printf("test for getValidBitLocation, 1 should == 2, and 2 should == 4, actual: %d, %d\n", getValidBitLocation(&d, 1), getValidBitLocation(&d, 2));
-  goto end;
+  goto end; */
   /*
   float (*sig)(float) = sigmoid; 
   printf("D origional\n");
@@ -77,6 +77,7 @@ int main(void){
   printf("The fast determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
   //printf("The slow determinant of q is %f\n", determinantOfMatrix(q,NULL));
 
+/* 
   matrix * randMatrix;
   for(int i=25;i<200;i++)
   {
@@ -84,13 +85,13 @@ int main(void){
     printf("The determinant of a random %d by %d is %f\n", i, i, fasterDeterminantOfAMatrix(randMatrix, NULL));
     freeMatrix(randMatrix);
   }
+ */
 
   float dataY[25] = {60, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
   matrix * y = loadMatrix(5,5, dataY);
   printMatrix(y);
   printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
 
-  end:
   return 0;
 }
 
