@@ -275,8 +275,14 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   //base case, with mask
   if(numberOfBits(limit) == 2)
   {
-    //TODO: use another supportive function
+    float a = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 2] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 1];
+    float b = in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows - 1] * in->columns[getValidBitLocation(limit, 2)]->data[in->noOfRows - 2];
+    result = a - b;
+    goto fasterDeterminantOfAMatrixEnd;
   }
+
+  //Now break it down recursivally
+  //TODO
 
 
 
