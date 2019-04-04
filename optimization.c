@@ -208,49 +208,53 @@ mask loadMask(int length, int newRestriction, mask * old)
   return result; 
 }
 
-//Return the int location of valid bits, ask for which one in reverse order, so 1 with nnYnnnnYnnYnYn would return 1
-//Requires additional testing
-int getValidBitLocation(mask * in, int whichOne)
+//tests if bit n is valid
+unsigned int bitValid(mask * in, int bit)
 {
-  int result = -1;//failure if no result found
-  int count = 0;//Which one are we on
-  for(int i=0;i<in->numberOfSegments;i++)
+  unsigned int result = 0;
+  if(!in)
   {
-    if(i != in->numberOfSegments - 1)
+    result = 2;
+    goto validEnd;
+  }
+  if(bit > in->length)
+  {
+    result = 3;
+    goto validEnd;
+  }
+  if(in->numberOfSegments>1)
+  {
+    if((in->dat[bit/32] & (0x1 << (bit%32))) > 0)
     {
-      for(int x=0;x<32;x++)
-      {
-        if((in->dat[i] & (0x1 << x)) > 0 )
-        {
-          count++;
-          if(count == whichOne)
-          {
-            result = (i*32) + x;
-            goto getValidBitEnd;
-          }
-        }
-      }
+      result = 1;
     }
-    else
-    {
-      for(int q=0;q<in->length - (i*32);q++)
-      {
-        if((in->dat[i] & (0x1 << q)) > 0 )
-        {
-          count++;
-          if(count == whichOne)
-          {
-            result = (i*32) + q;
-            goto getValidBitEnd;
-          }
-        }
-      }
-    }
-    
+    goto validEnd;
+  }
+  if((in->dat[0] & (0x1 << (bit%32))) > 0)
+  {
+    result = 1;
   }
 
-  getValidBitEnd:
+  validEnd:
     return result;
+}
+
+int getValidBitLocation(mask * limit, int number)
+{
+  int i = 0;
+  int current = -1;
+  while(i < number)
+  {
+    for(int x = 0;x<limit->length;x++)
+    {
+      if(bitValid(limit, x) == 1)
+      {
+        current = x;
+        i++;
+      }
+    }
+  }
+  return current;
 }
 
 //Revised attempt two
@@ -292,9 +296,9 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   //Now break it down recursivally
   //TODO
   if(limit){
-    for(int n = 0; n < numberOfBits(limit); n++ )
+    for(int n = (numberOfBits(limit) - 1); n >= 0; n-- )
     {
-      int nl = getValidBitLocation(limit, n);
+      int nl = getValidBitLocation(limit, n + 1);
       mask newLimitation = loadMask(limit->length, nl, limit);
       result = result + (negOneToThePower(n) * in->columns[nl]->data[( in->noOfColumns - numberOfBits(limit) )] * fasterDeterminantOfAMatrix(in, &newLimitation));
     }
@@ -302,7 +306,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   }
   else
   {
-    for(int t = 0; t < in->noOfColumns; t++)
+    for(int t = (in->noOfColumns - 1); t >= 0; t--)
     {
       mask newLimit = loadMask(in->noOfColumns, t, NULL);
       result = result + (negOneToThePower(t) * in->columns[t]->data[0] * fasterDeterminantOfAMatrix(in, &newLimit));

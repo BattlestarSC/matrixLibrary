@@ -12,6 +12,7 @@ typedef struct mask {
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit);
 int numberOfBits(mask * in);
 mask loadMask(int length, int newRestriction, mask * old);
-int getValidBitLocation(mask * in, int whichOne);
+unsigned int bitValid(mask * in, int bit);
+int getValidBitLocation(mask * limit, int number);
 
 #endif
