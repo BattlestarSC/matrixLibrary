@@ -302,7 +302,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       mask newLimitation = loadMask(limit->length, nl, limit);
       result = result + (negOneToThePower(n) * in->columns[nl]->data[( in->noOfColumns - numberOfBits(limit) )] * fasterDeterminantOfAMatrix(in, &newLimitation));
     }
-    goto fasterDeterminantOfAMatrixEnd;
+    //goto fasterDeterminantOfAMatrixEnd;
   }
   else
   {
@@ -311,7 +311,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       mask newLimit = loadMask(in->noOfColumns, t, NULL);
       result = result + (negOneToThePower(t) * in->columns[t]->data[0] * fasterDeterminantOfAMatrix(in, &newLimit));
     }
-    goto fasterDeterminantOfAMatrixEnd;
+    //goto fasterDeterminantOfAMatrixEnd;
   }
   
 

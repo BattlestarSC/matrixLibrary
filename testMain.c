@@ -11,19 +11,22 @@
 float sigmoid(float x);
 
 int main(void){
-/*   float dataA[] = {1.1, 2.2, 3.3, 4.1, 5.2, 6.7, 7.0, 8.4, 9.9};
+  /*
+  float dataA[] = {1.1, 2.2, 3.3, 4.1, 5.2, 6.7, 7.0, 8.4, 9.9};
   //printf("DATA A Val 3 is %d should be 3.3\n", dataA[2]); //WHAT THE EVER LIVING FUCK!!!? PRINTS SOME DAMN MASSIVE NUMBER HERE BUT PRINTS CORRECTLY IN MATRIX FORMAT
+  */
   float dataB[] = {0.1, 55.4, 605.3, 15.2, 12.5, 7.8, 800.9, 102.4, 111.111};
-  float dataC[] = {1.4, 5.2, 9.9};
-  matrix * a = loadMatrix(3, 3, dataA);
+  //float dataC[] = {1.4, 5.2, 9.9};
+  //matrix * a = loadMatrix(3, 3, dataA);
   //printf("Ran AFTER LOADING MATRIX a\n");
   matrix * b = loadMatrix(3, 3, dataB);
-  matrix * c = loadMatrix(1, 3, dataC);
+  printf("Faster b is %f\n", fasterDeterminantOfAMatrix(b, NULL));
+  //matrix * c = loadMatrix(1, 3, dataC);
   
-  matrix * d = copyMatrix(a);
+  //matrix * d = copyMatrix(a);
 
   //skip testing
-  */
+  
  /*  mask a = loadMask(16, 9, NULL);
   printf("a value is %d and is make of %d of 1 parts\n", *(a.dat), a.numberOfSegments);
   mask b = loadMask(16, 3, &a);
