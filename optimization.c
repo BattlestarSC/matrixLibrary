@@ -145,7 +145,7 @@ int getValidBitLocation(mask * limit, int number)
   }
   int i = 0;
   int current = -1;
-  while(i < number)
+  while(i <= number) //<= is possibly functional, but could be dangerous
   {
     for(int x = 0;x<limit->length;x++)
     {
