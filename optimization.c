@@ -179,19 +179,53 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       //Limit will used ONLY with supportive functions to assure same formating
       if(limit)//check if limit exists
       {
+        //base case
         if(numberOfBits(limit) == 2)
         {
           float q = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-2] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-1];
           float e = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-1] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-2];
           result = q * e;
         }
+        //now recurse and break it down
+        else
+        {
+          for(int i=0;i<numberOfBits(limit);i++)
+          {
+            mask newLimit = loadMask(limit->length, getValidBitLocation(limit, i), limit);
+            //POSSIBLE SUBTRACTION SEGFAULT, but check getValidBitLocation first
+            result = result + (negOneToThePower(i) * in->columns[getValidBitLocation(limit, i)]->data[in->noOfRows - numberOfBits(limit)] * fasterDeterminantOfAMatrix(in, &newLimit));
+          }
+        }
+        
       }
-
+      else
+      {//if not already computed, or too large
+        if(in->noOfColumns > 2 && in->noOfColumns < 64)
+        {
+          for(int i=0;i<in->noOfColumns;i++)
+          {
+            mask limiter = loadMask(in->noOfColumns, i, NULL);
+            result = result + (negOneToThePower(i) * in->columns[i]->data[0] * fasterDeterminantOfAMatrix(in, &limiter));
+          }
+        }
+        else
+        {//if not already done
+          if(in->noOfColumns > 64)
+          {
+            //TODO: gaussian elimination method for fucking massive matricies
+            int g = 0; //just avoid a gcc error, in a todo section
+          }
+        }
+        
+      }
       
+
+
 
 
     }
   }
+  return result;
 }
 
 
