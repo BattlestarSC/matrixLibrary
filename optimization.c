@@ -186,7 +186,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         {
           float q = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-2] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-1];
           float e = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-1] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-2];
-          result = q * e;
+          result = q - e;
         }
         //now recurse and break it down
         else
