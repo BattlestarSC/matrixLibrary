@@ -143,20 +143,20 @@ int getValidBitLocation(mask * limit, int number)
     printf("invalid input to getValidBitLocation\n");
     return -2;
   }
-  int i = 0;
   int current = -1;
-  while(i <= number) //<= is possibly functional, but could be dangerous
+  for(int i=0;i<limit->length;i++)
   {
-    for(int x = 0;x<limit->length;x++)
+    if(bitValid(limit, i) == 1)
     {
-      if(bitValid(limit, x) == 1)
-      {
-        current = x;
-        i++;
-      }
+      current++;
+    }
+    if(current == number)
+    {
+      return i;
     }
   }
-  return current;
+  printf("getValidLocation General failure (-1)\n");
+  return -1;
 }
 
 //attempt three, use the surrportive functions and try again
