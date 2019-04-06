@@ -162,6 +162,8 @@ int getValidBitLocation(mask * limit, int number)
 //attempt three, use the surrportive functions and try again
 float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 {
+  //debug
+  //printf("%p of mask \n",limit);
   float result = 0.0;
   //if not invalid
   if(in){
@@ -192,6 +194,8 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
           for(int i=0;i<numberOfBits(limit);i++)
           {
             mask newLimit = loadMask(limit->length, getValidBitLocation(limit, i), limit);
+            //debug 
+            //printf("--%p < - > %p   old < - > new\n", limit, &newLimit);
             //POSSIBLE SUBTRACTION SEGFAULT, but check getValidBitLocation first
             result = result + (negOneToThePower(i) * in->columns[getValidBitLocation(limit, i)]->data[in->noOfRows - numberOfBits(limit)] * fasterDeterminantOfAMatrix(in, &newLimit));
           }

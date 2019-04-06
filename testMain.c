@@ -19,8 +19,12 @@ int main(void){
   //float dataC[] = {1.4, 5.2, 9.9};
   //matrix * a = loadMatrix(3, 3, dataA);
   //printf("Ran AFTER LOADING MATRIX a\n");
-  matrix * b = loadMatrix(3, 3, dataB);
-  printf("Faster b is %f\n", fasterDeterminantOfAMatrix(b, NULL));
+  float dataU[] = {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0};
+  float dataI[] = {5.0,5.0,3.0,5.0,4.0,5.0,6.0,6.0,6.0};
+  matrix * b = loadMatrix(3, 3, dataU);
+  matrix * i = loadMatrix(3, 3, dataI);
+  printf("Faster b is %f, should be 0\n", fasterDeterminantOfAMatrix(b, NULL));
+  printf("Matrix should equal -12, is %f\n", fasterDeterminantOfAMatrix(i, NULL));
   //matrix * c = loadMatrix(1, 3, dataC);
   
   //matrix * d = copyMatrix(a);
