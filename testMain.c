@@ -99,6 +99,11 @@ int main(void){
   printMatrix(y);
   printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
 
+  float newRow[5] = {12.0, 5.0, 8.0, 7.0, 2};
+  matrix * v = appendRow(y, 5, newRow);
+  float newColumn[] = {19, 22, 13, 9, 6, 14};
+  matrix * p  = addColumn(v, 6, newColumn);
+  printf("determinant of p is %f\n", fasterDeterminantOfAMatrix(p, NULL));
   return 0;
 }
 
