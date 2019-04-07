@@ -94,16 +94,24 @@ int main(void){
   }
  */
 
-  float dataY[25] = {60, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
+  float dataY[25] = {2.5, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
   matrix * y = loadMatrix(5,5, dataY);
   printMatrix(y);
   printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
+  y->columns[4]->data[3] = -3.5;
+  printf("dat of y changed is %f\n", fasterDeterminantOfAMatrix(y, NULL));
+
 
   float newRow[5] = {12.0, 5.0, 8.0, 7.0, 2};
   matrix * v = appendRow(y, 5, newRow);
   float newColumn[] = {19, 22, 13, 9, 6, 14};
   matrix * p  = addColumn(v, 6, newColumn);
   printf("determinant of p is %f\n", fasterDeterminantOfAMatrix(p, NULL));
+  
+  float newTest[9] = { 10, 15, 3, 6, 1, 5, 2, 9, 17};
+  matrix * u = loadMatrix(3, 3, newTest);
+  printMatrix(u);
+  printf("New det is %f\n", fasterDeterminantOfAMatrix(u, NULL));
   return 0;
 }
 

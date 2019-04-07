@@ -12,6 +12,7 @@
 */
 /*
     Supportive funtion, counts bits
+    //WILL FAIL AT > 32 DUE TO NOT PROPERLY READING LENGTH
 */
 int numberOfBits(mask * in)
 {
@@ -229,6 +230,11 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
 
     }
   }
+  else
+  {
+    printf("General run failure\n");
+  }
+  
   return result;
 }
 
