@@ -5,6 +5,10 @@
 
 #include "matrix.h"
 #include "optimization.h"
+#include "display.h"
+
+#define DEBUG 1
+#define DEBUG_FILE "out\\debug.txt"
 
 /*
   Attempt two:
@@ -161,7 +165,7 @@ int getValidBitLocation(mask * limit, int number)
 }
 
 //attempt three, use the surrportive functions and try again
-float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
+float fasterDeterminantOfAMatrix(matrix * in, mask * limit, FILE * debugFile)
 {
   //debug
   //printf("%p of mask \n",limit);
@@ -173,9 +177,19 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       //base case, no need to itterate/recurse
       if(in->noOfColumns == 2)
       {
-        float a = in->columns[0]->data[0] * in->columns[1]->data[1];
-        float b = in->columns[0]->data[1] * in->columns[1]->data[0];
+        float posaa = getElementByXY(0,0,in);
+        float posab = getElementByXY(1,1,in);
+        float posba = getElementByXY(1,0,in);
+        float posbb = getElementByXY(0,1,in);
+        float a = posaa * posab;
+        float b = posba * posbb;
         result = a - b;
+        if(DEBUG == 1)
+        {
+          fprintf(debugFile, "Matrix was determined to be 2x2, matrix is as follows\n");
+          printMatrixToFile(in, debugFile);
+          fprintf(debugFile, "\nCalculations: (%f * %f) - (%f * %f) = %f\n\n\n", posaa, posab, posba, posbb, result);
+        }
       }
 
       //base case, WITH LIMIT
@@ -185,9 +199,24 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
         //base case
         if(numberOfBits(limit) == 2)
         {
-          float q = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-2] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-1];
-          float e = in->columns[getValidBitLocation(limit, 0)]->data[in->noOfRows-1] * in->columns[getValidBitLocation(limit, 1)]->data[in->noOfRows-2];
+          float aa = getElementByXY(in->noOfRows-2, getValidBitLocation(limit, 0), in);
+          float ab = getElementByXY(in->noOfRows-1, getValidBitLocation(limit, 1), in);
+          float ba = getElementByXY(in->noOfRows-1, getValidBitLocation(limit, 0), in);
+          float bb = getElementByXY(in->noOfRows-2, getValidBitLocation(limit, 1), in);
+
+          float q = aa * ab;
+          float e = ba * bb;
+
           result = q - e;
+          if(DEBUG == 1)
+          {
+            for(int n=0;n<(limit->length - numberOfBits(limit));n++)
+            {
+              fprintf(debugFile, "--");
+            }
+            fprintf(debugFile, "Limit mask has 2 valid spots, %d, %d\n", getValidBitLocation(limit, 0), getValidBitLocation(limit, 1));
+            fprintf(debugFile, "Computations: %f = (%f * %f) - (%f * %f)\nReturning result\n", result, aa, ab, ba, bb);
+          }
         }
         //now recurse and break it down
         else
@@ -198,7 +227,33 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
             //debug 
             //printf("--%p < - > %p   old < - > new\n", limit, &newLimit);
             //POSSIBLE SUBTRACTION SEGFAULT, but check getValidBitLocation first
-            result = result + (negOneToThePower(i) * in->columns[getValidBitLocation(limit, i)]->data[in->noOfRows - numberOfBits(limit)] * fasterDeterminantOfAMatrix(in, &newLimit));
+            if(DEBUG == 1)
+            {
+              for(int n=0;n<(limit->length - numberOfBits(limit));n++)
+              {
+                fprintf(debugFile, "--");
+              }
+              fprintf(debugFile, "new limit applied to position %d\nnew limit: ", i);
+              for(int q=0;q<limit->length;q++)
+              {
+                if(bitValid(&newLimit, q) == 1)
+                {
+                  fprintf(debugFile, "  %d", q);
+                }
+                fprintf(debugFile, "\n");
+              }
+              fprintf(debugFile, "Old limit\n");
+              for(int q=0;q<limit->length;q++)
+              {
+                if(bitValid(limit, q) == 1)
+                {
+                  fprintf(debugFile, "  %d", q);
+                }
+                fprintf(debugFile, "\n");
+              }
+              fprintf(debugFile, "\nResult = itself plus %f * %f * recurse\n\n", negOneToThePower(i), getElementByXY(in->noOfRows - numberOfBits(limit), getValidBitLocation(limit, i), in));
+            }
+            result = result + (negOneToThePower(i) * getElementByXY(in->noOfRows - numberOfBits(limit), getValidBitLocation(limit, i), in) * fasterDeterminantOfAMatrix(in, &newLimit, debugFile));
           }
         }
         
@@ -207,10 +262,20 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
       {//if not already computed, or too large
         if(in->noOfColumns > 2 && in->noOfColumns < 64)
         {
+          if(DEBUG == 1)
+          {
+            fprintf(debugFile, "Taking determinant of the following matrix\n");
+            printMatrixToFile(in, debugFile);
+            fprintf(debugFile, "\n\n\n");
+          }
           for(int i=0;i<in->noOfColumns;i++)
           {
             mask limiter = loadMask(in->noOfColumns, i, NULL);
-            result = result + (negOneToThePower(i) * in->columns[i]->data[0] * fasterDeterminantOfAMatrix(in, &limiter));
+            if(DEBUG == 1)
+            {
+              fprintf(debugFile, "\nNew limit is at position %d\nResult will equal %f * %f * recurse\n\n", i, negOneToThePower(i), getElementByXY(0, i, in));
+            }
+            result = result + (negOneToThePower(i) * getElementByXY(0, i, in) * fasterDeterminantOfAMatrix(in, &limiter, debugFile));
           }
         }
         else
@@ -238,7 +303,35 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit)
   return result;
 }
 
-
+float detOfMatrix(matrix * in)
+{
+  float result = 0.0;
+  if(DEBUG == 1)
+  {
+    FILE * debugFile = fopen(DEBUG_FILE, "r");
+    if(debugFile)
+    {
+      fclose(debugFile);
+      debugFile = fopen(DEBUG_FILE, "a");
+      for(int i=0;i<80;i++)
+      {
+        fprintf(debugFile, "-");
+      }
+      fprintf(debugFile, "\n");
+    }
+    else
+    {
+      debugFile = fopen(DEBUG_FILE, "w+");
+    }
+    result = fasterDeterminantOfAMatrix(in, NULL, debugFile);
+    fclose(debugFile);
+  }
+  else
+  {
+    result = fasterDeterminantOfAMatrix(in, NULL, NULL);
+  }
+  return result;
+}
 
 
 

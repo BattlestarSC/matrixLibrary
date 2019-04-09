@@ -30,6 +30,26 @@ void printMatrix(matrix * input)
 }
 
 /*
+    print matrix to file
+*/
+void printMatrixToFile(matrix * input, FILE * fp)
+{   
+    if(input == NULL){
+      printf("\n\nNULL\n\n");
+    } else {
+      for(int i=0;i<input->noOfRows;i++)
+      {
+        fprintf(fp,"\n");
+        for(int j=0;j<input->noOfColumns;j++)
+       {
+          fprintf(fp, "  %.4f  ", input->columns[j]->data[i]);
+       }
+     }
+     fprintf(fp, "\n");
+  }
+}
+
+/*
     print a flattened array to STDIN
 */
 void printArray(int length, float * arr)

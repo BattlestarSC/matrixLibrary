@@ -23,8 +23,8 @@ int main(void){
   float dataI[] = {5.0,5.0,3.0,5.0,4.0,5.0,6.0,6.0,6.0};
   matrix * b = loadMatrix(3, 3, dataU);
   matrix * i = loadMatrix(3, 3, dataI);
-  printf("Faster b is %f, should be 0\n", fasterDeterminantOfAMatrix(b, NULL));
-  printf("Matrix should equal -12, is %f\n", fasterDeterminantOfAMatrix(i, NULL));
+  //printf("Faster b is %f, should be 0\n", detOfMatrix(b));
+  //printf("Matrix should equal -12, is %f\n", detOfMatrix(i));
   //matrix * c = loadMatrix(1, 3, dataC);
   
   //matrix * d = copyMatrix(a);
@@ -79,9 +79,9 @@ int main(void){
   //printMatrix(l);
   //printf("The determinant of l is %f\n", determinantOfMatrix(l,NULL));
   //printf("The determinat of above is %f\n", determinantOfMatrix(h,NULL));
-  matrix * q = loadMatrix(10, 10, dataQ);
-  printMatrix(q);
-  printf("The fast determinant of q is %f\n", fasterDeterminantOfAMatrix(q,NULL)); 
+  //matrix * q = loadMatrix(10, 10, dataQ);
+  //printMatrix(q);
+  //printf("The fast determinant of q is %f\n", detOfMatrix(q)); 
   //printf("The slow determinant of q is %f\n", determinantOfMatrix(q,NULL));
 
 /* 
@@ -97,21 +97,21 @@ int main(void){
   float dataY[25] = {2.5, 17,  2,  4, 13, 72, 58, 22, 19, 12, 21, 14, 81, 84,  1, 76, 51, 74, 83, 63,  7, 99, 90, 85, 66};
   matrix * y = loadMatrix(5,5, dataY);
   printMatrix(y);
-  printf("det of y is %f\n", fasterDeterminantOfAMatrix(y, NULL));
+  printf("det of y is %f\n", detOfMatrix(y));
   y->columns[4]->data[3] = -3.5;
-  printf("dat of y changed is %f\n", fasterDeterminantOfAMatrix(y, NULL));
+  printf("dat of y changed is %f\n", detOfMatrix(y));
 
 
   float newRow[5] = {12.0, 5.0, 8.0, 7.0, 2};
   matrix * v = appendRow(y, 5, newRow);
   float newColumn[] = {19, 22, 13, 9, 6, 14};
   matrix * p  = addColumn(v, 6, newColumn);
-  printf("determinant of p is %f\n", fasterDeterminantOfAMatrix(p, NULL));
+  printf("determinant of p is %f\n", detOfMatrix(p));
   
   float newTest[9] = { 10, 15, 3, 6, 1, 5, 2, 9, 17};
   matrix * u = loadMatrix(3, 3, newTest);
   printMatrix(u);
-  printf("New det is %f\n", fasterDeterminantOfAMatrix(u, NULL));
+  printf("New det is %f\n", detOfMatrix(u));
   return 0;
 }
 
