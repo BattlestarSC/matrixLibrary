@@ -233,7 +233,7 @@ float fasterDeterminantOfAMatrix(matrix * in, mask * limit, FILE * debugFile)
               {
                 fprintf(debugFile, "--");
               }
-              fprintf(debugFile, "new limit applied to position %d\nnew limit: ", i);
+              fprintf(debugFile, "new limit applied to position %d\nnew limit: \n", i);
               for(int q=0;q<limit->length;q++)
               {
                 if(bitValid(&newLimit, q) == 1)
